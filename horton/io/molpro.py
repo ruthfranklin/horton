@@ -146,12 +146,17 @@ def dump_fcidump(filename, data):
                     for l in xrange(k+1):
                         if (i*(i+1))/2+j >= (k*(k+1))/2+l:
                             value = two_mo.get_element(i,k,j,l)
-                            if value != 0.0:
+                            if abs(value) > 1.e-10:
                                 print >> f, '%23.16e %4i %4i %4i %4i' % (value, i+1, j+1, k+1, l+1)
         for i in xrange(nactive):
             for j in xrange(i+1):
                 value = one_mo.get_element(i,j)
-                if value != 0.0:
+                if abs(value) > 1.e-10:
                     print >> f, '%23.16e %4i %4i %4i %4i' % (value, i+1, j+1, 0, 0)
+        if hasattr(data, 'sp_eigv'):
+            for i in xrange(nactive):
+                value = data.sp_eigv[i]
+                if abs(value) > 1.e-10:
+                    print >> f, '%23.16e %4i %4i %4i %4i' % (value, i+1, 0, 0, 0)
         if core_energy != 0.0:
             print >> f, '%23.16e %4i %4i %4i %4i' % (core_energy, 0, 0, 0, 0)
